@@ -19,10 +19,6 @@ do
 opts="$1"
 
 case $opts in
-  -b|--browser)
-  BROWSER="$2"
-  shift
-  ;;
   -i|--id)
   ID=$(echo -n "$2" | grep [0-9])
   shift
@@ -31,31 +27,14 @@ case $opts in
   ID=$(curl -s https://steamcommunity.com/groups/$2/memberslistxml/?xml=1 | grep -oPm1 "(?<=<groupID64>)[^<]+" | grep [0-9])
   shift
   ;;
-  -t|--time)
-  TIME="$2"
-  KILL=true
-  shift
-  ;;
-  -k|--kill)
-  KILL=true
-  shift
-  ;;
   *)
   ;;
 esac
 shift
 done
 
-if [ -z ${TIME+x} ]; then TIME=2; fi # Maybe to quick for slow computers
-if [ -z ${BROWSER+x} ]; then BROWSER="xdg-open"; fi
-if [ -z ${ID+x} ]; then >&2 echo "Error: Steam group ID needed!"; exit 2; fi
+if [ -z ${ID+x} ]; then >&2 echo "Error: Steam group ID needed!"; exit 1; fi
 
 export LD_LIBRARY_PATH="${LD_LIBRARY_PATH-}:/usr/lib32" # steam-native hotfix
 
-$BROWSER steam://friends/joinchat/$ID &
-
-if $KILL; then
-  sleep $TIME
-
-  killall $BROWSER
-fi
+steam steam://friends/joinchat/$ID
