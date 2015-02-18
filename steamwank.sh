@@ -27,6 +27,10 @@ case $opts in
   ID=$(echo -n "$2" | grep [0-9])
   shift
   ;;
+  -n|--name)
+  ID=$(curl -s https://steamcommunity.com/groups/$2/memberslistxml/?xml=1 | grep -oPm1 "(?<=<groupID64>)[^<]+" | grep [0-9])
+  shift
+  ;;
   -t|--time)
   TIME="$2"
   KILL=true
