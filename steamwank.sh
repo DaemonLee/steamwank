@@ -24,7 +24,7 @@ case $opts in
   shift
   ;;
   -i|--id)
-  ID="$2"
+  ID=$(echo -n "$2" | grep [0-9])
   shift
   ;;
   -t|--time)
