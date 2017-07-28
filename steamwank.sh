@@ -35,6 +35,4 @@ done
 
 if [ -z "${ID+x}" ]; then >&2 echo "Error: Steam group ID needed!"; exit 1; fi
 
-export LD_LIBRARY_PATH="${LD_LIBRARY_PATH-}:/usr/lib32" # steam-native hotfix
-
 steam steam://friends/joinchat/"$ID"
