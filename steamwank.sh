@@ -14,17 +14,17 @@
 #   See the License for the specific language governing permissions and
 #   limitations under the License.
 
-while [[ $# > 1 ]]
+while [ $# -gt 0 ]
 do
 opts="$1"
 
 case $opts in
   -i|--id)
-  ID=$(echo -n "$2" | grep [0-9])
+  ID=$(echo "$2" | grep "[0-9]")
   shift
   ;;
   -n|--name)
-  ID=$(curl -s https://steamcommunity.com/groups/$2/memberslistxml/?xml=1 | grep -oPm1 "(?<=<groupID64>)[^<]+" | grep [0-9])
+  ID=$(curl -s https://steamcommunity.com/groups/"$2"/memberslistxml/?xml=1 | grep -oPm1 "(?<=<groupID64>)[^<]+" | grep "[0-9]")
   shift
   ;;
   *)
@@ -33,8 +33,8 @@ esac
 shift
 done
 
-if [ -z ${ID+x} ]; then >&2 echo "Error: Steam group ID needed!"; exit 1; fi
+if [ -z "${ID+x}" ]; then >&2 echo "Error: Steam group ID needed!"; exit 1; fi
 
 export LD_LIBRARY_PATH="${LD_LIBRARY_PATH-}:/usr/lib32" # steam-native hotfix
 
-steam steam://friends/joinchat/$ID
+steam steam://friends/joinchat/"$ID"
